@@ -108,11 +108,9 @@ class OpenDS:
         }
         return self._request(url, param=params)
 
-    def tb_create(self, token, ds_id, name, schema, uniq_key, title=None):
+    def tb_create(self, ds_id, name, schema, uniq_key, title=None):
         url = '%s/api/tb/create' % self.url_prefix
-        params = {
-            'access_token': token,
-        }
+
         data = {
             'ds_id': ds_id,
             'name': name,
@@ -122,7 +120,7 @@ class OpenDS:
         if title:
             data['title'] = title
 
-        return self._request(url, param=params, payload=data)
+        return self._request(url, payload=data)
 
     def tb_name_modify(self, token, tb_id, alias_name):
         url = '%s/api/tb/modify' % self.url_prefix
@@ -133,19 +131,17 @@ class OpenDS:
         }
         return self._request(url, param=params)
 
-    def tb_delete(self, token, tb_id):
+    def tb_delete(self, tb_id):
         url = '%s/api/tb/delete' % self.url_prefix
 
         params = {
-            'access_token': token,
             'tb_id': tb_id
         }
         return self._request(url, param=params)
 
-    def tb_list(self, token, ds_id):
+    def tb_list(self, ds_id):
         url = '%s/api/tb/list' % self.url_prefix
         params = {
-            'access_token': token,
             'ds_id': ds_id
         }
         return self._request(url, param=params)

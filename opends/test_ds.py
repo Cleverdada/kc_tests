@@ -7,13 +7,15 @@ from opends import OpenDS
 ds_name = "test_opends_ds"
 
 
-class TestDs(unittest.TestCase):
+class TestTable(unittest.TestCase):
     def setUp(self):
         sdk = OpenDS()
         self.ds_id = self.ds_name_exists(ds_name)
         if self.ds_id:
             sdk.ds_delete(self.ds_id)
         self.ds_id = sdk.ds_create(ds_name)["ds_id"]
+
+
 
     def ds_name_exists(self, ds_name):
         sdk = OpenDS()
@@ -31,6 +33,10 @@ class TestDs(unittest.TestCase):
     def test_status(self):
         sdk = OpenDS()
         sdk.ds_status(self.ds_id, OpenDS.DS_STATUS_ERROR, "test")
+
+    def test_create_tb(self):
+        sdk = OpenDS()
+        sdk.tb_create()
 
 if __name__ == '__main__':
     unittest.main()
