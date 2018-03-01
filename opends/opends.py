@@ -77,15 +77,21 @@ class OpenDS:
                 errstr="connection failed",
                 req_id=""
             )
+
             raise OpenDSException(error_msg)
 
         if result['status'] != '0':
-
-            error_msg = u"\nstatus: {status}\nerror_str: {errstr}\nrequest_id: {req_id}".format(
+            print result['status'], result['errstr'], u"status: %s, 错误: %s, request_id: %s" % (
+                result['status'], result['errstr'], result.get('request_id', ''))
+            message = '{errstr} {request_id}'.format(**result)
+            # print message
+            # print type(message)
+            error_msg = "\nstatus: {status}\nerror_str: {errstr}\nrequest_id: {req_id}".format(
                 status=result['status'],
-                errstr=result['errstr'],
+                errstr=result['errstr'].encode("utf-8"),
                 req_id=result.get('request_id', '')
             )
+            print error_msg
             raise OpenDSException(error_msg)
         return result['result']
 
@@ -108,7 +114,7 @@ class OpenDS:
         }
         return self._request(url, param=params)
 
-    def tb_create(self, ds_id, name, schema, uniq_key, title=None):
+    def tb_create(self, ds_id, name, schema, uniq_key, title=None, comment=None):
         url = '%s/api/tb/create' % self.url_prefix
 
         data = {
@@ -119,6 +125,9 @@ class OpenDS:
         }
         if title:
             data['title'] = title
+
+        if comment:
+            data['comment'] = comment
 
         return self._request(url, payload=data)
 
@@ -248,10 +257,9 @@ class OpenDS:
         }
         return self._request(url, param=params)
 
-    def field_del(self, token, tb_id, name):
+    def field_del(self, tb_id, name):
         url = '%s/api/field/delete' % self.url_prefix
         params = {
-            'access_token': token,
             'tb_id': tb_id,
             'name': name
         }
@@ -353,4 +361,8 @@ class OpenDS:
             'domain': domain,
         }
         return self._request(url, param=params)
+
+    def service_error(self):
+        url = "%s/api/service/error" % self.url_prefix
+        return self._request(url)
 

@@ -7,15 +7,15 @@ from opends import OpenDS
 ds_name = "test_opends_ds"
 
 
-class TestTable(unittest.TestCase):
+class TestDs(unittest.TestCase):
     def setUp(self):
         sdk = OpenDS()
+        # sdk.service_error()
         self.ds_id = self.ds_name_exists(ds_name)
+
         if self.ds_id:
             sdk.ds_delete(self.ds_id)
         self.ds_id = sdk.ds_create(ds_name)["ds_id"]
-
-
 
     def ds_name_exists(self, ds_name):
         sdk = OpenDS()

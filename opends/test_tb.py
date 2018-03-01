@@ -9,7 +9,7 @@ tb_name = "test_opends_tb"
 
 schema = [
         {
-            "remark": "",
+            "remark": "字段别名",
             "name": "id",
             "type": "number",
             "title": "ident"
@@ -45,13 +45,14 @@ class TestTb(unittest.TestCase):
         if self.ds_id:
             sdk.ds_delete(self.ds_id)
         self.ds_id = sdk.ds_create(ds_name)["ds_id"]
+        print self.ds_id
 
         # init table
 
         self.tb_id = self.tb_name_exists()
         if self.tb_id:
             sdk.tb_delete(self.tb_id)
-        self.tb_id = sdk.tb_create(self.ds_id, tb_name, schema, [])
+        self.tb_id = sdk.tb_create(self.ds_id, tb_name, schema, [], comment="工作表")
 
     def tb_name_exists(self):
         sdk = OpenDS()
@@ -73,6 +74,10 @@ class TestTb(unittest.TestCase):
         # folder_3802d78711587de8621076fa94f29c79
         pass
 
+    def test_field_delete(self):
+        sdk = OpenDS()
+        field_name = "name"
+        sdk.field_del(self.tb_id, field_name)
 
 if __name__ == '__main__':
     unittest.main()
